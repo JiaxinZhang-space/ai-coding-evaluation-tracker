@@ -1,0 +1,22 @@
+# Local continuity and tooling
+task_state.md
+pitfall_log.md
+.local/
+work/
+.env
+.env.*
+!.env.example
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+node_modules/
+dist/
+.venv/
+__pycache__/
+.pytest_cache/
+.coverage
+coverage/
+playwright-report/
+test-results/
