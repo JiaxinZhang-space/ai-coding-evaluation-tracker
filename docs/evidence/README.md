@@ -4,7 +4,7 @@
 
 Application acceptance AC01-AC24: UNVERIFIED. No business code, tests, CI workflow, containers or deployment exist yet. Synthetic sample observations in the product spec are examples, not executed results.
 
-Phase 1 documentation checks will be recorded in phase-1-audit.md after the files and tracker exist.
+See the [Phase 1 verification record](phase-1-audit.md) for executed document checks and their limits.
 
 ## Run record template
 
