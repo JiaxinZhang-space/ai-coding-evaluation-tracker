@@ -16,8 +16,8 @@ Phase 1 can commit directly to main to establish the planning baseline. After CI
 
 ## Definition of done
 
-- Scope and acceptance conditions are satisfied.
-- Relevant unit, integration and frontend tests ran and passed; browser evidence exists for changed user journeys.
+- Scope and the issue-owned acceptance conditions are satisfied. For split acceptance IDs, use the ownership table in docs/acceptance.md. An issue may close after its own subconditions are verified; the parent AC remains UNVERIFIED until every required subcondition is verified. Backend issues do not require later UI implementation.
+- Relevant tests for the issue-owned layer ran and passed: backend unit/integration tests for P02/P03; frontend and browser checks for P04. Evidence for later layers remains UNVERIFIED rather than blocking completion of an earlier issue.
 - Evidence identifies the tested commit and environment.
 - Spec/API changes are reflected in docs.
 - No company data, credentials or generated database is committed.

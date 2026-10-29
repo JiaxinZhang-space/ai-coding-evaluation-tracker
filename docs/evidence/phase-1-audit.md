@@ -5,7 +5,7 @@ Role: Codex documentation self-review; no independent agent review claimed.
 Planning source commit: f4a5ae61330202889eef42dc17fd5cbe4a988ba5.
 Repository: https://github.com/JiaxinZhang-space/ai-coding-evaluation-tracker.
 Tracker: issues 1 through 11, created and read back using authenticated GitHub CLI.
-Environment: Windows PowerShell, Git and GitHub CLI.
+Environment requirement: PowerShell 7 (pwsh), Git and GitHub CLI. The documentation audit was rechecked on PowerShell 7.6.5 during the P01 corrections; the initial record did not capture an exact version.
 
 ## Observed results
 
@@ -26,7 +26,7 @@ The follow-up evidence commit adds this record and the ledger link; its final ch
 
 ## Reproduce the document audit
 
-Run the following PowerShell from the repository root. This is a documentation check, not an application test.
+Run the following script in PowerShell 7 (pwsh) from the repository root. Windows PowerShell 5.1 is unsupported because it lacks System.IO.Path.GetRelativePath. This is a documentation check, not an application test.
 
 ```powershell
 $ErrorActionPreference = 'Stop'
@@ -48,6 +48,7 @@ foreach ($file in $publicFiles) {
 }
 if ($missing.Count) { throw ($missing -join [char]10) }
 $acText = Get-Content docs/acceptance.md -Raw
+$acText = ($acText -split '(?m)^## ', 2)[0] # Count original parent IDs, not repeated ownership entries.
 $ids = @([regex]::Matches($acText, '(?m)^\| (AC\d{2}) \|') | ForEach-Object { $_.Groups[1].Value })
 if ($ids.Count -ne 24 -or @($ids | Select-Object -Unique).Count -ne 24) { throw 'Acceptance IDs missing or duplicated' }
 $rubricText = Get-Content docs/rubric-mapping.md -Raw

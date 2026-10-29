@@ -6,11 +6,11 @@ Build AI Coding Evaluation Tracker using synthetic data only. Phase 1 is documen
 
 ## Start every task
 
-1. Read this file, README.md and the local task_state.md.
+1. Read this file and README.md. Read task_state.md if present. If task_state.md or pitfall_log.md is missing in a fresh clone, first recover context from the public Issues, docs/backlog.md and docs/evidence/README.md. Then create the missing local handoff files if useful; their absence must not stop work. Keep both files ignored by Git and record only supported facts.
 2. Read the assigned public issue and its acceptance criteria.
 3. Read docs/product-spec.md, docs/architecture.md and the relevant sections of docs/acceptance.md.
 4. Read docs/team.md for role boundaries and docs/process.md for handoff and evidence rules.
-5. Check local pitfall_log.md and Git status. Preserve unrelated changes.
+5. Read pitfall_log.md if present and check Git status. Preserve unrelated changes.
 6. State the active role and exact acceptance conditions before editing.
 
 ## Modular context

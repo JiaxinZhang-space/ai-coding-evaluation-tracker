@@ -65,6 +65,31 @@ All routes use /api. IDs are opaque server-generated identifiers.
 
 Malformed/invalid fields return 422; unknown resources 404; lifecycle conflicts 409; public read-only mutations 403. Errors use a documented JSON code/message with field details where applicable; do not leak SQL or stack traces. OpenAPI is generated from implemented schemas and checked against this contract during implementation.
 
+## Task lifecycle HTTP outcomes
+
+These rules apply to existing resources with otherwise valid payloads in local write-enabled mode. Invalid fields return 422; unknown resources return 404. Every rejected mutation leaves database rows, counts, ordering and timestamps unchanged, including any other fields supplied in the same request.
+
+| Operation and precondition | HTTP result | Stored outcome |
+| --- | --- | --- |
+| DRAFT -> ACTIVE with 1-20 valid criteria | 200 | State becomes ACTIVE |
+| DRAFT -> ACTIVE with no criteria | 409 | No changes |
+| ACTIVE -> DRAFT | 409 | No changes |
+| DRAFT or ACTIVE -> ARCHIVED | 200 | State becomes ARCHIVED; history retained |
+| Any mutation of ARCHIVED, including metadata edits or reactivation | 409 | No changes; reads remain available |
+| Edit title/description of DRAFT or ACTIVE | 200 | Valid metadata saved; state unchanged |
+| Add a valid criterion to an unlocked DRAFT or ACTIVE task with fewer than 20 criteria | 201 | One criterion added |
+| Add a 21st criterion to an otherwise unlocked task | 422, code CRITERION_LIMIT_EXCEEDED | No changes; input error identifies the 20-criterion limit |
+| Edit an unlocked criterion with valid fields | 200 | Criterion saved |
+| Delete an unlocked criterion, except the last criterion of ACTIVE | 204 | Criterion removed |
+| Delete the last criterion of ACTIVE | 409 | No changes |
+| Create an Evaluation for DRAFT or ARCHIVED | 409 | No evaluation or result rows created |
+| Create the first Evaluation for ACTIVE | 201 | Evaluation and results created atomically; task criteria become locked |
+| Add/edit/delete/reorder criteria after any Evaluation exists | 409 | No changes, including scores and history |
+
+DRAFT permits zero criteria; no task may exceed 20. ACTIVE must retain at least one valid criterion. ARCHIVED has no outgoing transition. Criterion locking does not prevent editing the title/description of an ACTIVE task. An Evaluation in DRAFT state still locks the task criteria; finalization is not required for the lock.
+
+The Evaluation-creation guard and criterion lock after real Evaluation creation are scheduled for implementation and testing in P03. P02 implements task/criterion behavior before any Evaluation exists; it must not fabricate passing evidence for the later guard.
+
 ## Persistence and synthetic data
 
 Use /data/tracker.db on a named Compose volume. Startup applies missing migrations and seeds only an empty database using fixed synthetic IDs in one transaction. Restarting must never duplicate or overwrite user-created mock records. Tests use temporary database files, not the demo volume. No automatic reset on application startup.

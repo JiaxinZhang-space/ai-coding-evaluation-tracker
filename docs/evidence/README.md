@@ -6,6 +6,8 @@ Application acceptance AC01-AC24: UNVERIFIED. No business code, tests, CI workfl
 
 See the [Phase 1 verification record](phase-1-audit.md) for executed document checks and their limits.
 
+See the [P01 targeted correction verification](p01-corrections.md) for ownership/lifecycle fixes, the F3 correction and current documentation readiness. Runtime conditions remain UNVERIFIED.
+
 ## Run record template
 
 - Issue and acceptance IDs:
